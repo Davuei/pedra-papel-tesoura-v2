@@ -11,6 +11,7 @@ COPY . .
 RUN npm run build
 
 
+
 # ETAPA 2: O Servidor de Produção (Nginx)
 FROM nginx:alpine
 
