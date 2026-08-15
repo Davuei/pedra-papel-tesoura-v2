@@ -1,11 +1,15 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
+import { PlayerContextProvider } from './contexts/PlayerContext'
+import { ComputerContextProvider } from './contexts/ComputerContext'
 import { App } from './App'
-
-import '../public/global.css'
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <App />
+    <PlayerContextProvider>
+      <ComputerContextProvider>
+        <App />
+      </ComputerContextProvider>
+    </PlayerContextProvider>
   </StrictMode>,
 )

@@ -1,34 +1,54 @@
 import { counterPlaysMapping } from "../constants/counterPlaysMapping"
+import type { ComputerContextProps } from "../contexts/ComputerContext"
+import type { PlayerContextProps } from "../contexts/PlayerContext"
 
 export function chooseGesture(
-  playerGesture: number,
-  playerSetter: React.Dispatch<React.SetStateAction<number>>,
-  computerSetter: React.Dispatch<React.SetStateAction<number>>,
-  titleSetter: React.Dispatch<React.SetStateAction<string>>,
-  controlSetter: React.Dispatch<React.SetStateAction<boolean>>
+  chosenGesture: number,
+  player: PlayerContextProps,
+  computer: ComputerContextProps,
+  titleSetter: React.Dispatch<React.SetStateAction<string>>
 ) {
-  if(playerGesture < 0 || playerGesture > 3) return
-
-  controlSetter(true)
+  player.setPlayerAnimation('idle')
+  computer.setComputerAnimation('idle')
   titleSetter('...')
-  playerSetter(1)
-  computerSetter(1)
-
+  player.setPlayerAnimation('playing')
+  player.setPlayerGesture(1)
+  computer.setComputerAnimation('playing')
+  computer.setComputerGesture(1)
+  
   setTimeout(() => {
-    playerSetter(playerGesture)
+    player.setPlayerGesture(chosenGesture)
 
     const computerGesture = Math.floor(Math.random() * 3) + 1
-    computerSetter(computerGesture)
+    computer.setComputerGesture(computerGesture)
 
-    const resultArray = counterPlaysMapping[playerGesture as keyof typeof counterPlaysMapping] || undefined
+    const resultArray = counterPlaysMapping[chosenGesture as keyof typeof counterPlaysMapping] || undefined
     const resultMatch = resultArray.indexOf(computerGesture)
 
-    controlSetter(false)
+    player.setPlayerAnimation('idle')
+    computer.setComputerAnimation('idle')
 
-    if(resultMatch != -1) {
-      if(resultMatch == 0) titleSetter('Vitória!!')
-      else return titleSetter('Derrota...')
-    } else
-      return titleSetter('Empate!')
+    setTimeout(() => {
+      if(resultMatch != -1) {
+        if(resultMatch == 0) {
+          titleSetter('Vitória!!')
+          player.setPlayerGesture(4)
+          player.setPlayerAnimation('win')
+          computer.setComputerGesture(5)
+          computer.setComputerAnimation('lose')
+        }
+        else {
+          titleSetter('Derrota...')
+          player.setPlayerGesture(5)
+          player.setPlayerAnimation('lose')
+          computer.setComputerGesture(4)
+          computer.setComputerAnimation('win')
+        }
+      } else {
+        titleSetter('Empate!')
+        player.setPlayerAnimation('idle')
+        computer.setComputerAnimation('idle')
+      }
+    }, 1000);
   }, 1600);
 }

@@ -1,0 +1,25 @@
+@import "tailwindcss";
+
+@theme {
+  --animate-rotate: rotate 1.6s ease-in-out infinite alternate;
+
+  @keyframes rotate {
+    from {
+      transform: rotate(20deg)
+    }
+    to {
+      transform: rotate(-20deg)
+    }
+  }
+
+  --animate-play: play 0.32s ease-in infinite alternate;
+
+  @keyframes play {
+    from {
+      transform: translateY(-24px)
+    }
+    to {
+      transform: translateY(0)
+    }
+  }
+}
